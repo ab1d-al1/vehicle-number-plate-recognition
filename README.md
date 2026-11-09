@@ -8,14 +8,14 @@ This project compares three object detection models — **YOLOv8, Faster R-CNN, 
 
 The system follows a two-stage pipeline:
 
-1. **License Plate Detection:** Detects and localizes vehicle number plates using YOLOv8, Faster R-CNN, or SSD300.
-2. **Number Plate Recognition:** Extracts and recognizes the characters from detected plate regions using PARSeq OCR.
+1. **License Plate Detection:** Detects and localizes number plates using YOLOv8, Faster R-CNN, or SSD300.
+2. **Number Plate Recognition:** Extracts detected plate regions and recognizes their characters using PARSeq OCR.
 
 The project evaluates individual detection models and the complete detection-plus-recognition pipeline.
 
 ## Models Used
 
-| Task | Models |
+| Task | Model |
 |---|---|
 | Object Detection | YOLOv8 |
 | Object Detection | Faster R-CNN |
@@ -38,7 +38,7 @@ This project uses the **UFPR-ALPR dataset**.
 
 ## Model Evaluation Results
 
-The following detector and end-to-end results were obtained using a **100-image evaluation subset containing 100 ground-truth plate boxes**. These results represent the evaluation subset, not the complete dataset.
+The detector and end-to-end results below were obtained using a **100-image evaluation subset containing 100 ground-truth plate boxes**. These are evaluation-subset results, not full-dataset results.
 
 ### 1. Object Detection Performance
 
@@ -71,16 +71,14 @@ PARSeq was also evaluated separately using ground-truth plate crops.
 | Exact Plate Match | 1,377 / 1,800 (76.50%) |
 | Character Accuracy | 93.16% |
 
-**Note:** The PARSeq OCR-only results use ground-truth plate crops. They are separate from the end-to-end results, where the OCR model receives plate regions produced by the detection models.
+**Note:** OCR-only results use ground-truth plate crops. They are separate from end-to-end results, where PARSeq receives plate regions produced by the detection models.
 
 ## Results and Observations
 
-- **YOLOv8:** Achieved a strong balance of precision, recall, F1-score, and inference speed in the evaluation.
-- **Faster R-CNN:** Achieved the highest recall, AP metrics, and end-to-end exact plate match, but had higher inference time and more false positives.
-- **SSD300:** Showed lower recall and overall performance in this evaluation and requires further improvement.
-- **PARSeq:** Achieved 76.50% exact plate match and 93.16% character accuracy on the separate ground-truth crop evaluation.
-
-Based on these results, YOLOv8 provides a strong balance between detection performance and speed, while Faster R-CNN provides higher detection coverage at a greater computational cost.
+- **YOLOv8:** Provides a strong balance of precision, recall, F1-score, and inference speed in the reported evaluation.
+- **Faster R-CNN:** Achieves the highest recall, AP metrics, and end-to-end exact plate match, but has higher inference time and more false positives.
+- **SSD300:** Shows lower recall and overall performance in this evaluation and requires further improvement.
+- **PARSeq:** Achieves 76.50% exact plate match and 93.16% character accuracy on the separate ground-truth crop evaluation.
 
 ## Project Workflow
 
@@ -95,17 +93,19 @@ Based on these results, YOLOv8 provides a strong balance between detection perfo
 ## Technologies Used
 
 - Python
-- Deep Learning
-- Computer Vision
-- YOLOv8
+- PyTorch
+- TorchVision
+- OpenCV
+- NumPy
+- Pandas
+- Matplotlib
+- Ultralytics YOLOv8
 - Faster R-CNN
 - SSD300
 - PARSeq Transformer
 - Optical Character Recognition (OCR)
 
 ## Repository Structure
-
-The repository will be organized as follows as the project files are added:
 
 ```text
 vehicle-number-plate-recognition/
@@ -115,35 +115,96 @@ vehicle-number-plate-recognition/
 ├── .gitignore
 │
 ├── notebooks/
-│   ├── yolo_training.ipynb
-│   ├── faster_rcnn_training.ipynb
-│   ├── ssd_training.ipynb
-│   └── parseq_ocr_training.ipynb
+│   ├── FasterRCNN.ipynb
+│   ├── SSD300_PARSeq.ipynb
+│   ├── UFPR_ALPR_Three_Model_100_Image_Evaluation (1).ipynb
+│   └── Yolo_PARseq.ipynb
 │
-├── src/
-│   ├── detection/
-│   ├── recognition/
-│   └── evaluation/
+├── docs/
+│   └── methodology.md
 │
-├── configs/
-├── weights/
-├── results/
-│   ├── metrics/
-│   └── visualizations/
+├── examples/
+│   ├── README.md
+│   └── demo/
+│       ├── vehicle_01.png
+│       ├── vehicle_02.png
+│       └── vehicle_03.png
 │
-└── docs/
-    └── methodology.md
+└── results/
+    ├── README.md
+    ├── model_comparison.csv
+    └── parseq_ocr_results.csv
 ```
 
-Only files actually added to the repository should be considered available.
+## Installation and Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/ab1d-al1/vehicle-number-plate-recognition.git
+cd vehicle-number-plate-recognition
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+Activate it on Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+On macOS/Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+### 3. Install PyTorch and TorchVision
+
+Install compatible versions of PyTorch and TorchVision using the official installation selector:
+
+[PyTorch Installation Guide](https://pytorch.org/get-started/locally/)
+
+Choose the configuration appropriate for your operating system and CPU/CUDA environment.
+
+### 4. Install the remaining dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Open the notebooks
+
+```bash
+jupyter notebook
+```
+
+Open the required notebook from the `notebooks/` directory.
+
+**Reproducibility note:** The notebooks may require dataset files, trained model checkpoints, and environment-specific paths from the original training environment. These assets are not currently included in this repository. Configure the required paths and obtain the necessary data and model files before running the notebooks.
+
+## Current Scope and Limitations
+
+- The reported detector comparison is based on a 100-image evaluation subset, not the complete UFPR-ALPR dataset.
+- The UFPR-ALPR dataset is not distributed in this repository.
+- Trained model checkpoints are not currently included.
+- A standalone inference script and upload-based demo application are not yet included.
+- The notebooks may require additional configuration to run outside the original training environment.
+- Performance may vary with lighting, image quality, viewing angle, and plate visibility.
+- Real-world deployment requires further testing, validation, and appropriate authorization.
 
 ## Future Improvements
 
 - Improve SSD300 detection performance.
-- Further optimize inference speed.
-- Improve OCR accuracy under challenging lighting and image conditions.
+- Optimize model inference speed.
+- Improve OCR accuracy under challenging image conditions.
 - Evaluate on larger and more diverse test sets.
-- Develop a complete real-time ALPR application.
+- Develop a standalone inference pipeline.
+- Build an interactive application for image upload and number plate recognition.
 
 ## Disclaimer
 
@@ -152,4 +213,3 @@ This project is intended for educational and research purposes. License plate re
 ## Acknowledgements
 
 Thanks to the researchers who developed and made the UFPR-ALPR dataset available for academic research.
-
