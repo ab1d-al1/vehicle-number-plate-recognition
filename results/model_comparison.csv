@@ -1,0 +1,13 @@
+﻿Metric,YOLOv8,Faster R-CNN,SSD300
+True Positives,97,100,57
+False Positives,4,31,10
+False Negatives,3,0,43
+Precision (%),96.04,76.34,85.07
+Recall (%),97.00,100.00,57.00
+F1-Score (%),96.52,86.58,68.26
+AP@0.50 (%),96.92,99.92,55.16
+mAP@0.50:0.95 (%),72.26,79.26,28.02
+Mean Matched IoU (%),87.38,89.07,75.19
+Mean Inference Time (ms/image),85.51,280.17,109.65
+End-to-End Exact Plate Match (%),73.00,75.00,46.00
+End-to-End Mean Character Accuracy (%),89.43,92.86,57.71

@@ -1,0 +1,6 @@
+﻿Metric,Value
+Evaluation Type,OCR-only on ground-truth plate crops
+Exact Plate Matches,1377
+Total Test Samples,1800
+Exact Plate Match (%),76.50
+Character Accuracy (%),93.16
